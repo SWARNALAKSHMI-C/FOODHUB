@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodHub 🍽️</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: #333;
+}
+header {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+nav {
+    display: flex;
+    justify-content: space-around;
+    background: #222;
+    padding: 10px;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+.container {
+    padding: 20px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 20px;
+}
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+button {
+    background: #ff5722;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background: #e64a19;
+}
+#cart, #checkout, #admin {
+    background: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+input {
+    padding: 10px;
+    width: 90%;
+    margin: 5px;
+}
+footer {
+    text-align: center;
+    padding: 10px;
+    background: black;
+    color: white;
+}
+</style>
+</head>
+<body><header>
+<h1>🍔 FoodHub - Order Delicious Food</h1>
+<p>Fast Delivery | Best Taste | Affordable</p>
+</header><nav>
+<a href="#">Menu</a>
+<a href="#cart">Cart</a>
+<a href="#admin">Admin</a>
+</nav><div class="container">
+<h2>🍽️ Menu</h2>
+<div class="grid" id="menu"></div><div id="cart">
+<h2>🛒 Cart</h2>
+<ul id="cartItems"></ul>
+<p>Total: ₹<span id="total">0</span></p>
+<button onclick="showCheckout()">Checkout</button>
+</div><div id="checkout" style="display:none;">
+<h2>💳 Checkout</h2>
+<input id="name" placeholder="Your Name"><br>
+<input id="address" placeholder="Delivery Address"><br>
+<button onclick="placeOrder()">Place Order</button>
+</div><div id="confirmation" style="display:none;">
+<h2>✅ Order Confirmed</h2>
+<p id="msg"></p>
+</div><div id="admin">
+<h2>📊 Admin Orders</h2>
+<button onclick="showOrders()">Load Orders</button>
+<ul id="orders"></ul>
+</div>
+</div><footer>
+<p>© 2026 FoodHub | Designed for Project 🚀</p>
+</footer><script>
+const foodItems = [
+    {name:'Burger', price:120, img:'https://source.unsplash.com/200x150/?burger'},
+    {name:'Pizza', price:250, img:'https://source.unsplash.com/200x150/?pizza'},
+    {name:'Pasta', price:180, img:'https://source.unsplash.com/200x150/?pasta'},
+    {name:'Sandwich', price:90, img:'https://source.unsplash.com/200x150/?sandwich'}
+];
+
+let cart = [];
+let orders = [];
+
+function loadMenu() {
+    let menu = document.getElementById('menu');
+    foodItems.forEach((f,i) => {
+        let div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+            <img src="${f.img}">
+            <h3>${f.name}</h3>
+            <p>₹${f.price}</p>
+            <button onclick="addToCart(${i})">Add to Cart</button>
+        `;
+        menu.appendChild(div);
+    });
+}
+
+function addToCart(index) {
+    cart.push(foodItems[index]);
+    displayCart();
+}
+
+function displayCart() {
+    let list = document.getElementById('cartItems');
+    list.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+        let li = document.createElement('li');
+        li.textContent = `${item.name} - ₹${item.price}`;
+        list.appendChild(li);
+        total += item.price;
+    });
+    document.getElementById('total').textContent = total;
+}
+
+function showCheckout() {
+    document.getElementById('checkout').style.display = 'block';
+}
+
+function placeOrder() {
+    let name = document.getElementById('name').value;
+    let address = document.getElementById('address').value;
+
+    if(!name || !address) {
+        alert('Fill all details');
+        return;
+    }
+
+    let total = cart.reduce((sum,i)=>sum+i.price,0);
+
+    let order = {name, address, cart:[...cart], total};
+    orders.push(order);
+
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('msg').textContent = `Thanks ${name}, Order ₹${total} placed!`;
+
+    cart = [];
+    displayCart();
+}
+
+function showOrders() {
+    let ul = document.getElementById('orders');
+    ul.innerHTML = '';
+    orders.forEach((o,i)=>{
+        let li = document.createElement('li');
+        li.textContent = `Order ${i+1}: ${o.name} - ₹${o.total}`;
+        ul.appendChild(li);
+    });
+}
+
+loadMenu();
+</script></body>
+</html>
