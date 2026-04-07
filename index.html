@@ -2,226 +2,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FoodHub 🍽️</title><!-- Google Font --><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"><style>
+<title>FoodHub 🍽️</title><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"><style>
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    background: #fff5f0;
 }
 
 header {
-    background: linear-gradient(to right, #000000cc, #333333cc);
+    background: #ff3d00;
     color: white;
     padding: 20px;
     text-align: center;
 }
 
-nav {
-    display: flex;
-    justify-content: space-around;
-    background: #111;
-    padding: 12px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-nav a:hover {
-    color: #ff9800;
+h2 {
+    margin-top: 10px;
 }
 
 .container {
-    padding: 20px;
+    padding: 15px;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+    gap: 15px;
 }
 
 .card {
     background: white;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-8px) scale(1.03);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .card img {
     width: 100%;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 button {
-    background: linear-gradient(to right, #ff5722, #ff9800);
-    border: none;
-    padding: 10px;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
     width: 100%;
-    font-weight: bold;
+    padding: 8px;
+    background: #ff3d00;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 5px;
 }
 
-button:hover {
-    opacity: 0.9;
-}
-
-#cart, #checkout, #admin, #confirmation {
+#cartBox {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     background: white;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-input {
-    padding: 12px;
-    width: 95%;
-    margin: 8px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-footer {
-    text-align: center;
+    border-top: 3px solid #ff3d00;
     padding: 15px;
-    background: #000;
-    color: white;
-    margin-top: 20px;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
 }
 
-.badge {
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.total {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.pay-btn {
     background: green;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-size: 12px;
 }
 
-</style></head>
-<body><header>
+</style></head><body><header>
 <h1>🍔 FoodHub</h1>
-<p>Fast Delivery | Hot & Fresh | Best Price</p>
-</header><nav>
-<a href="#">Menu</a>
-<a href="#cart">Cart</a>
-<a href="#admin">Admin</a>
-</nav><div class="container"><h2>🔥 Popular Dishes</h2>
-<div class="grid" id="menu"></div><div id="cart">
-<h2>🛒 Cart</h2>
-<ul id="cartItems"></ul>
-<p>Total: ₹<span id="total">0</span></p>
-<button onclick="showCheckout()">Proceed to Checkout</button>
-</div><div id="checkout" style="display:none;">
-<h2>💳 Checkout</h2>
-<input id="name" placeholder="Your Name">
-<input id="address" placeholder="Delivery Address">
-<input id="phone" placeholder="Phone Number">
-<button onclick="placeOrder()">Place Order</button>
-</div><div id="confirmation" style="display:none;">
-<h2>🎉 Order Confirmed</h2>
-<p id="msg"></p>
-</div><div id="admin">
-<h2>📊 Admin Dashboard</h2>
-<button onclick="showOrders()">View Orders</button>
-<ul id="orders"></ul>
-</div></div><footer>
-<p>© 2026 FoodHub | Made with ❤️</p>
-</footer><script>
+<p>Order Food Like Zomato 🍕</p>
+</header><div class="container">
+<h2>Menu</h2>
+<div class="grid" id="menu"></div>
+</div><div id="cartBox">
+<h3>🛒 Cart</h3>
+<div id="cartItems"></div>
+<p class="total">Total: ₹<span id="total">0</span></p>
+<button class="pay-btn" onclick="payNow()">Pay Now</button>
+</div><script>
 const foodItems = [
-    {name:'Burger', price:120, img:'https://source.unsplash.com/200x150/?burger'},
-    {name:'Pizza', price:250, img:'https://source.unsplash.com/200x150/?pizza'},
-    {name:'Pasta', price:180, img:'https://source.unsplash.com/200x150/?pasta'},
-    {name:'Sandwich', price:90, img:'https://source.unsplash.com/200x150/?sandwich'},
-    {name:'Fries', price:70, img:'https://source.unsplash.com/200x150/?fries'},
-    {name:'Ice Cream', price:100, img:'https://source.unsplash.com/200x150/?icecream'}
+{name:'Pizza', price:200, img:'https://source.unsplash.com/200x150/?pizza'},
+{name:'Burger', price:150, img:'https://source.unsplash.com/200x150/?burger'},
+{name:'Sandwich', price:120, img:'https://source.unsplash.com/200x150/?sandwich'},
+{name:'French Fries', price:100, img:'https://source.unsplash.com/200x150/?fries'},
+{name:'Pasta', price:180, img:'https://source.unsplash.com/200x150/?pasta'},
+{name:'Ice Cream', price:90, img:'https://source.unsplash.com/200x150/?icecream'}
 ];
 
 let cart = [];
-let orders = [];
 
 function loadMenu() {
-    let menu = document.getElementById('menu');
-    menu.innerHTML = '';
+let menu = document.getElementById('menu');
+menu.innerHTML = '';
 
-    foodItems.forEach((f,i) => {
-        let div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-            <img src="${f.img}">
-            <h3>${f.name} <span class="badge">Hot</span></h3>
-            <p>₹${f.price}</p>
-            <button onclick="addToCart(${i})">Add to Cart</button>
-        `;
-        menu.appendChild(div);
-    });
+foodItems.forEach((item, index) => {
+let div = document.createElement('div');
+div.className = 'card';
+div.innerHTML = `
+<img src="${item.img}">
+<h3>${item.name}</h3>
+<p>₹${item.price}</p>
+<button onclick="addToCart(${index})">Add</button>
+`;
+menu.appendChild(div);
+});
 }
 
 function addToCart(index) {
-    cart.push(foodItems[index]);
-    displayCart();
+cart.push(foodItems[index]);
+updateCart();
 }
 
-function displayCart() {
-    let list = document.getElementById('cartItems');
-    list.innerHTML = '';
-    let total = 0;
+function updateCart() {
+let cartDiv = document.getElementById('cartItems');
+cartDiv.innerHTML = '';
 
-    cart.forEach((item, i) => {
-        let li = document.createElement('li');
-        li.innerHTML = `${item.name} - ₹${item.price} <button onclick="removeItem(${i})">❌</button>`;
-        list.appendChild(li);
-        total += item.price;
-    });
+let total = 0;
 
-    document.getElementById('total').textContent = total;
+cart.forEach((item, i) => {
+let div = document.createElement('div');
+div.className = 'cart-item';
+div.innerHTML = `
+<span>${item.name} - ₹${item.price}</span>
+<button onclick="removeItem(${i})">❌</button>
+`;
+cartDiv.appendChild(div);
+
+total += item.price;
+});
+
+document.getElementById('total').textContent = total;
 }
 
-function removeItem(index) {
-    cart.splice(index, 1);
-    displayCart();
+function removeItem(i) {
+cart.splice(i, 1);
+updateCart();
 }
 
-function showCheckout() {
-    document.getElementById('checkout').style.display = 'block';
+function payNow() {
+if(cart.length === 0) {
+alert('Cart is empty!');
+return;
 }
 
-function placeOrder() {
-    let name = document.getElementById('name').value;
-    let address = document.getElementById('address').value;
-    let phone = document.getElementById('phone').value;
-
-    if(!name || !address || !phone) {
-        alert('Please fill all details');
-        return;
-    }
-
-    let total = cart.reduce((sum,i)=>sum+i.price,0);
-
-    let order = {name, address, phone, cart:[...cart], total};
-    orders.push(order);
-
-    document.getElementById('confirmation').style.display = 'block';
-    document.getElementById('msg').textContent = `Thanks ${name}! Your order of ₹${total} is on the way 🚀`;
-
-    cart = [];
-    displayCart();
+let total = cart.reduce((sum, item) => sum + item.price, 0);
+alert('Payment Successful! ₹' + total);
+cart = [];
+updateCart();
 }
 
-function showOrders() {
-    let ul = document.getElementById('orders');
-    ul.innerHTML = '';
-
-    orders.forEach((o,i)=>{
-        let li = document.createElement('li');
-        li.text
+loadMenu();
+</script></body>
+</html>
