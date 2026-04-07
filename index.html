@@ -2,118 +2,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FoodHub 🍽️</title>
-<style>
+<title>FoodHub 🍽️</title><!-- Google Font --><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"><style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #ff7e5f, #feb47b);
-    color: #333;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
 }
+
 header {
-    background: rgba(0,0,0,0.7);
+    background: linear-gradient(to right, #000000cc, #333333cc);
     color: white;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
 }
+
 nav {
     display: flex;
     justify-content: space-around;
-    background: #222;
-    padding: 10px;
+    background: #111;
+    padding: 12px;
 }
+
 nav a {
-    color: white;
+    color: #fff;
     text-decoration: none;
     font-weight: bold;
+    transition: 0.3s;
 }
+
+nav a:hover {
+    color: #ff9800;
+}
+
 .container {
     padding: 20px;
 }
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap: 25px;
 }
+
 .card {
     background: white;
     border-radius: 15px;
     padding: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: transform 0.3s;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
 }
+
 .card:hover {
-    transform: scale(1.05);
+    transform: translateY(-8px) scale(1.03);
 }
+
 .card img {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
 }
+
 button {
-    background: #ff5722;
+    background: linear-gradient(to right, #ff5722, #ff9800);
     border: none;
     padding: 10px;
     color: white;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    width: 100%;
+    font-weight: bold;
 }
+
 button:hover {
-    background: #e64a19;
+    opacity: 0.9;
 }
-#cart, #checkout, #admin {
+
+#cart, #checkout, #admin, #confirmation {
     background: white;
     padding: 20px;
     margin-top: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+
 input {
-    padding: 10px;
-    width: 90%;
-    margin: 5px;
+    padding: 12px;
+    width: 95%;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
+
 footer {
     text-align: center;
-    padding: 10px;
-    background: black;
+    padding: 15px;
+    background: #000;
     color: white;
+    margin-top: 20px;
 }
-</style>
-</head>
+
+.badge {
+    background: green;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+</style></head>
 <body><header>
-<h1>🍔 FoodHub - Order Delicious Food</h1>
-<p>Fast Delivery | Best Taste | Affordable</p>
+<h1>🍔 FoodHub</h1>
+<p>Fast Delivery | Hot & Fresh | Best Price</p>
 </header><nav>
 <a href="#">Menu</a>
 <a href="#cart">Cart</a>
 <a href="#admin">Admin</a>
-</nav><div class="container">
-<h2>🍽️ Menu</h2>
+</nav><div class="container"><h2>🔥 Popular Dishes</h2>
 <div class="grid" id="menu"></div><div id="cart">
 <h2>🛒 Cart</h2>
 <ul id="cartItems"></ul>
 <p>Total: ₹<span id="total">0</span></p>
-<button onclick="showCheckout()">Checkout</button>
+<button onclick="showCheckout()">Proceed to Checkout</button>
 </div><div id="checkout" style="display:none;">
 <h2>💳 Checkout</h2>
-<input id="name" placeholder="Your Name"><br>
-<input id="address" placeholder="Delivery Address"><br>
+<input id="name" placeholder="Your Name">
+<input id="address" placeholder="Delivery Address">
+<input id="phone" placeholder="Phone Number">
 <button onclick="placeOrder()">Place Order</button>
 </div><div id="confirmation" style="display:none;">
-<h2>✅ Order Confirmed</h2>
+<h2>🎉 Order Confirmed</h2>
 <p id="msg"></p>
 </div><div id="admin">
-<h2>📊 Admin Orders</h2>
-<button onclick="showOrders()">Load Orders</button>
+<h2>📊 Admin Dashboard</h2>
+<button onclick="showOrders()">View Orders</button>
 <ul id="orders"></ul>
-</div>
-</div><footer>
-<p>© 2026 FoodHub | Designed for Project 🚀</p>
+</div></div><footer>
+<p>© 2026 FoodHub | Made with ❤️</p>
 </footer><script>
 const foodItems = [
     {name:'Burger', price:120, img:'https://source.unsplash.com/200x150/?burger'},
     {name:'Pizza', price:250, img:'https://source.unsplash.com/200x150/?pizza'},
     {name:'Pasta', price:180, img:'https://source.unsplash.com/200x150/?pasta'},
-    {name:'Sandwich', price:90, img:'https://source.unsplash.com/200x150/?sandwich'}
+    {name:'Sandwich', price:90, img:'https://source.unsplash.com/200x150/?sandwich'},
+    {name:'Fries', price:70, img:'https://source.unsplash.com/200x150/?fries'},
+    {name:'Ice Cream', price:100, img:'https://source.unsplash.com/200x150/?icecream'}
 ];
 
 let cart = [];
@@ -121,12 +152,14 @@ let orders = [];
 
 function loadMenu() {
     let menu = document.getElementById('menu');
+    menu.innerHTML = '';
+
     foodItems.forEach((f,i) => {
         let div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
             <img src="${f.img}">
-            <h3>${f.name}</h3>
+            <h3>${f.name} <span class="badge">Hot</span></h3>
             <p>₹${f.price}</p>
             <button onclick="addToCart(${i})">Add to Cart</button>
         `;
@@ -143,13 +176,20 @@ function displayCart() {
     let list = document.getElementById('cartItems');
     list.innerHTML = '';
     let total = 0;
-    cart.forEach(item => {
+
+    cart.forEach((item, i) => {
         let li = document.createElement('li');
-        li.textContent = `${item.name} - ₹${item.price}`;
+        li.innerHTML = `${item.name} - ₹${item.price} <button onclick="removeItem(${i})">❌</button>`;
         list.appendChild(li);
         total += item.price;
     });
+
     document.getElementById('total').textContent = total;
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    displayCart();
 }
 
 function showCheckout() {
@@ -159,19 +199,20 @@ function showCheckout() {
 function placeOrder() {
     let name = document.getElementById('name').value;
     let address = document.getElementById('address').value;
+    let phone = document.getElementById('phone').value;
 
-    if(!name || !address) {
-        alert('Fill all details');
+    if(!name || !address || !phone) {
+        alert('Please fill all details');
         return;
     }
 
     let total = cart.reduce((sum,i)=>sum+i.price,0);
 
-    let order = {name, address, cart:[...cart], total};
+    let order = {name, address, phone, cart:[...cart], total};
     orders.push(order);
 
     document.getElementById('confirmation').style.display = 'block';
-    document.getElementById('msg').textContent = `Thanks ${name}, Order ₹${total} placed!`;
+    document.getElementById('msg').textContent = `Thanks ${name}! Your order of ₹${total} is on the way 🚀`;
 
     cart = [];
     displayCart();
@@ -180,13 +221,7 @@ function placeOrder() {
 function showOrders() {
     let ul = document.getElementById('orders');
     ul.innerHTML = '';
+
     orders.forEach((o,i)=>{
         let li = document.createElement('li');
-        li.textContent = `Order ${i+1}: ${o.name} - ₹${o.total}`;
-        ul.appendChild(li);
-    });
-}
-
-loadMenu();
-</script></body>
-</html>
+        li.text
