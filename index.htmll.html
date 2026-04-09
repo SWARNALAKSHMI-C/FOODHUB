@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodHub</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #fff5f0;
+}
+
+header {
+  background: #ff3d00;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.container {
+  padding: 15px;
+  padding-bottom: 180px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: none;
+  background: #ff3d00;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#cartBox {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-top: 3px solid #ff3d00;
+  padding: 10px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.total {
+  font-weight: bold;
+}
+
+.pay-btn {
+  background: green;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>🍔 FoodHub</h2>
+<p>Delicious Food Ordering</p>
+</header>
+
+<div class="container">
+<h3>Menu</h3>
+<div class="grid" id="menu"></div>
+</div>
+
+<div id="cartBox">
+<h3>🛒 Cart</h3>
+<div id="cartItems"></div>
+<p class="total">Total: ₹<span id="total">0</span></p>
+<button class="pay-btn" onclick="payNow()">Pay Now</button>
+</div>
+
+<script>
+
+const foods = [
+{name:"Pizza", price:300, img:"https://source.unsplash.com/200x150/?pizza"},
+{name:"Burger", price:200, img:"https://source.unsplash.com/200x150/?burger"},
+{name:"French Fries", price:150, img:"https://source.unsplash.com/200x150/?fries"},
+{name:"Sandwich", price:180, img:"https://source.unsplash.com/200x150/?sandwich"},
+{name:"Pasta", price:250, img:"https://source.unsplash.com/200x150/?pasta"},
+{name:"Ice Cream", price:120, img:"https://source.unsplash.com/200x150/?icecream"}
+];
+
+let cart = [];
+
+function loadMenu() {
+  let menu = document.getElementById("menu");
+
+  foods.forEach((item, index) => {
+    let div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <img src="${item.img}">
+      <h4>${item.name}</h4>
+      <p>₹${item.price}</p>
+      <button onclick="addToCart(${index})">Add to Cart</button>
+    `;
+
+    menu.appendChild(div);
+  });
+}
+
+function addToCart(index) {
+  cart.push(foods[index]);
+  updateCart();
+}
+
+function updateCart() {
+  let cartDiv = document.getElementById("cartItems");
+  cartDiv.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    let div = document.createElement("div");
+    div.className = "cart-item";
+
+    div.innerHTML = `
+      <span>${item.name} - ₹${item.price}</span>
+      <button onclick="removeItem(${i})">X</button>
+    `;
+
+    cartDiv.appendChild(div);
+    total += item.price;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function removeItem(i) {
+  cart.splice(i, 1);
+  updateCart();
+}
+
+function payNow() {
+  if(cart.length === 0) {
+    alert("Cart is empty!");
+    return;
+  }
+
+  let total = document.getElementById("total").innerText;
+
+  alert("✅ Payment Successful!\nThank you for purchasing ❤️\nTotal Paid: ₹" + total);
+
+  cart = [];
+  updateCart();
+}
+
+loadMenu();
+
+</script>
+
+</body>
+</html>
